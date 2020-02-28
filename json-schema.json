@@ -1,0 +1,286 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://json-schema.org/draft-07/schema#",
+    "title": "Core schema meta-schema",
+    "definitions": {
+        "schemaArray": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "$ref": "#"
+            }
+        },
+        "nonNegativeInteger": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "nonNegativeIntegerDefault0": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/nonNegativeInteger"
+                },
+                {
+                    "default": 0
+                }
+            ]
+        },
+        "simpleTypes": {
+            "enum": [
+                "array",
+                "boolean",
+                "integer",
+                "null",
+                "number",
+                "object",
+                "string"
+            ]
+        },
+        "stringArray": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "uniqueItems": true,
+            "default": []
+        }
+    },
+    "type": [
+        "object",
+        "boolean"
+    ],
+    "properties": {
+        "$id": {
+            "type": "string",
+            "format": "uri-reference",
+            "description": "$id 关键字可以为一组约束指定一个唯一的 id，便于结构化的引用和定义引用跟路径。"
+        },
+        "$schema": {
+            "type": "string",
+            "format": "uri"
+        },
+        "$ref": {
+            "type": "string",
+            "format": "uri-reference",
+            "description":"在definitions 关键字定义可被引用的约束条件。再通过 $ref 关键字进行引用即可重用一些共用的约束"
+        },
+        "$comment": {
+            "type": "string"
+        },
+        "title": {
+            "type": "string",
+            "description": "描述对象的标题"
+        },
+        "description": {
+            "type": "string",
+            "description": "对数据进行说明描述"
+        },
+        "default": true,
+        "readOnly": {
+            "type": "boolean",
+            "default": false,
+            "description": "只读"
+        },
+        "writeOnly": {
+            "type": "boolean",
+            "default": false,
+            "description": "只写"
+        },
+        "examples": {
+            "type": "array",
+            "items": true,
+            "description": "从 draft06 支持的关键字，提供当前约束的示例"
+        },
+        "multipleOf": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "multipleOf 关键字可以校验 json 数据是否是给定条件数据的整数倍,\n 如示例{ \"type\": \"number\", \"multipleOf\": 10 }的定义，数据 20，230 符合约束， 232 则不符合。"
+        },
+        "maximum": {
+            "type": "number",
+            "description": "maximum取值 ≤"
+        },
+        "exclusiveMaximum": {
+            "type": "number",
+            "description": "exclusiveMaximum取值 <"
+        },
+        "minimum": {
+            "type": "number",
+            "description": "minimum取值 ≥"
+        },
+        "exclusiveMinimum": {
+            "type": "number",
+            "description": "exclusiveMinimum取值>"
+        },
+        "maxLength": {
+            "$ref": "#/definitions/nonNegativeInteger",
+            "description": "约束数据值最大的字串长度"
+        },
+        "minLength": {
+            "$ref": "#/definitions/nonNegativeIntegerDefault0",
+            "description": "约束数据值最小的字串长度"
+        },
+        "pattern": {
+            "type": "string",
+            "format": "regex",
+            "description":"使用正则表达式约束可允许的字符串,如^(\\([0-9]{3}\\))?[0-9]{3}-[0-9]{4}$"
+        },
+        "additionalItems": {
+            "$ref": "#",
+            "description": "和 additionalProperties 关键字比较类似，additionalItems 关键字约束了数组是否允许额外的数组项。"
+        },
+        "items": {
+            "anyOf": [
+                {
+                    "$ref": "#"
+                },
+                {
+                    "$ref": "#/definitions/schemaArray"
+                }
+            ],
+            "default": true,
+            "description": "约束 array 类型的主要关键字是 item，用于约束数组中每项的取值约束, \n \"items\": { \"type\": \"number\" }。\n 也可以按数组项顺序逐项对数组进行约定。\n 比如上例，逐项约束的话可定义为：{ \"type\": \"array\", \"items\": [ { \"type\": \"number\" }, { \"type\": \"string\", \"enum\": [\"different\",\"same\"] }, { \"type\": \"object\" } ] }"
+        },
+        "maxItems": {
+            "$ref": "#/definitions/nonNegativeInteger",
+            "description": "通过 minItems、 maxItems 可以定义数组的长度,{ \"type\": \"array\", \"minItems\": 2, \"maxItems\": 3}定义数组长度至少为 2， 不超过 3"
+        },
+        "minItems": {
+            "$ref": "#/definitions/nonNegativeIntegerDefault0"
+        },
+        "uniqueItems": {
+            "type": "boolean",
+            "default": false,
+            "description": "uniqueItems 是约束数组唯一性的关键字，取值为 boolean 型，为 true 时可以约束数组对象中的每一项唯一。"
+        },
+        "contains": {
+            "$ref": "#",
+            "description": "约束数组中只需要包含至少一个符合条件的项即可"
+        },
+        "maxProperties": {
+            "$ref": "#/definitions/nonNegativeInteger",
+            "description": "minProperties 和 maxProperties 是用来约束 object 对象长度的关键字，取值需为正整数，且 maxProperties 应大于 minProperties 。"
+        },
+        "minProperties": {
+            "$ref": "#/definitions/nonNegativeIntegerDefault0",
+            "description": "minProperties 和 maxProperties 是用来约束 object 对象长度的关键字，取值需为正整数，且 maxProperties 应大于 minProperties 。"
+        },
+        "required": {
+            "$ref": "#/definitions/stringArray",
+            "description": "required 关键字是配合 properties 关键字使用，\n用于约定 properties 定义中必须包含的属性。取值为一个属性名称的数组列表。\n ...\"required\": [\"name\", \"email\"] }表明对象数据中必须包含 name 和 email 两个属性，其他的则不作要求。"
+        },
+        "additionalProperties": {
+            "$ref": "#",
+            "description": "additionalProperties 关键字是一个和 properties 关键字配合使用的关键字，\n 取值可以是 boolean 型或者 object 。作用是对限制 properties 定义的属性进行限制。\n当 additionalProperties 取值为 boolean 型 false 时，表示除了 properties 中已定义的属性，不允许出现额外的属性。\n 而当它为 object 时， 同时需要符合模式描述，用于限制除 properties 中定义的属性外，额外的属性必须符合该关键字约束。\n \"additionalProperties\": { \"type\": \"string\" } }\n 上面的约束表明除了在 properties 中定义的属性外，仅允许字符型的其他属性出现。"
+        },
+        "definitions": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#"
+            },
+            "default": {},
+            "description": "definitions 关键字可以定义可被引用的约束条件。再通过 $ref 关键字进行引用即可重用一些共用的约束"
+        },
+        "properties": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#"
+            },
+            "default": {},
+            "description": "是描述对象属性约束的关键字，它的取值也必须是个对象，而且也必须符合 Json-Schema 模式。即相当于把 对应的校验对象单独拿出，也可使用 properties 的取值约定进行校验。如：\"properties\": { \"price\": { \"type\": \"number\" } }"
+        },
+        "patternProperties": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#"
+            },
+            "propertyNames": {
+                "format": "regex"
+            },
+            "default": {},
+            "description": "使用正则表达式约束属性名称（键名）"
+        },
+        "dependencies": {
+            "type": "object",
+            "additionalProperties": {
+                "anyOf": [
+                    {
+                        "$ref": "#"
+                    },
+                    {
+                        "$ref": "#/definitions/stringArray"
+                    }
+                ]
+            },
+            "description": "通过 dependencies 关键字来定义对象属性间的依赖关系。\n ... \"dependencies\": { \"credit_card\": [\"billing_address\"] } } \n这个 dependencies 约束表示，当存在 credit_card 属性时，也必须存在 billing_address 属性。\n 双向约束\"dependencies\": { \"credit_card\": [\"billing_address\"], \"billing_address\": [\"credit_card\"] }"
+        },
+        "propertyNames": {
+            "$ref": "#",
+            "description": "propertyNames 关键字用于约束属性名称（键名），并且可支持正则表达式"
+        },
+        "const": true,
+        "enum": {
+            "type": "array",
+            "items": true,
+            "minItems": 1,
+            "uniqueItems": true,
+            "description": "一般用于约束数据在枚举范围内进行取值。\n 在有些情况下，比如下例这种约束冲突的情况，在已经约定了数据类型为 string 时，枚举中虽然给出了 null 的取值范围，\n 但是如果数据取值为 null，因为不符合 type 约束，依然是不符合模式定义。"
+        },
+        "type": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/simpleTypes"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/simpleTypes"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                }
+            ],
+            "description": "明确限定属性的类型,\n string 类型，对应的数据对象必须是字符串形式的文本（支持 unicode 字符）,\n integer 只能匹配整数、\n number可以匹配任何数字(整数或浮点数) ,\n object约束数据必须为对象类型,\n array约束数据为数组类型,\n boolean布尔类型，取值为 true 或 false,\n null约束只能取值为null"
+        },
+        "format": {
+            "type": "string",
+            "description": "支持多种内置格式校验:\n \"regex\"支持正则表达式, \"date-time\"支持形如 \"2018-11-13T20:20:39+00:00\" 格式的字串\n \"time\": 支持形如 \"20:20:39+00:0\" 格式的字串 （draft 07 版本）\n \"date\": 支持形如 \"2018-11-13\" 格式的字串（draft 07 版本）\n \"email\": 符合Email格式定义，形如 \"chengxiaqiucao@chat.cn\"\n \"ipv4\": 验证 ipv4 格式的 ip 地址,\n \"ipv6\": 验证 ipv6 格式的 ip 地址,\n \"uri\": 验证形如 \"http://www.gitchat.cn\" 这样的 uri 地址"
+        },
+        "contentMediaType": {
+            "type": "string",
+            "description": "对字符串值的解析,contentMediaType明确解析类型,配合contentEncoding来完成解析,\n如\"contentMediaType\": \"text/html\", \n或者{ \"type\": \"string\", \"contentEncoding\": \"base64\", \"contentMediaType\": \"image/png\"}"
+        },
+        "contentEncoding": {
+            "type": "string",
+            "description": "对字符串值的解析,contentMediaType明确解析类型,配合contentEncoding来完成解析,\n如\"contentMediaType\": \"text/html\", \n或者{ \"type\": \"string\", \"contentEncoding\": \"base64\", \"contentMediaType\": \"image/png\"}"
+        },
+        "if": {
+            "$ref": "#",
+            "description": "if、 then、 else，可以给出一些约束的互相依赖关系，如下例约束当 country 是美国时，对应的区号约束条件： \n { \"type\": \"object\", \"properties\": { \"street_address\": \n{ \"type\": \"string\" }, \"country\": { \"enum\": [\"United States of America\", \"Canada\"] } }, \n\"if\": { \"properties\": { \"country\": { \"const\": \"United States of America\" } } }, \n\"then\": { \"properties\": { \"postal_code\": { \"pattern\": \"[0-9]{5}(-[0-9]{4})?\" } } }, \n\"else\": { \"properties\": { \"postal_code\": { \"pattern\": \"[A-Z][0-9][A-Z] [0-9][A-Z][0-9]\" } } } }"
+        },
+        "then": {
+            "$ref": "#",
+            "description": "if、 then、 else，可以给出一些约束的互相依赖关系，如下例约束当 country 是美国时，对应的区号约束条件： \n { \"type\": \"object\", \"properties\": { \"street_address\": \n{ \"type\": \"string\" }, \"country\": { \"enum\": [\"United States of America\", \"Canada\"] } }, \n\"if\": { \"properties\": { \"country\": { \"const\": \"United States of America\" } } }, \n\"then\": { \"properties\": { \"postal_code\": { \"pattern\": \"[0-9]{5}(-[0-9]{4})?\" } } }, \n\"else\": { \"properties\": { \"postal_code\": { \"pattern\": \"[A-Z][0-9][A-Z] [0-9][A-Z][0-9]\" } } } }"
+        },
+        "else": {
+            "$ref": "#",
+            "description": "if、 then、 else，可以给出一些约束的互相依赖关系，如下例约束当 country 是美国时，对应的区号约束条件： \n { \"type\": \"object\", \"properties\": { \"street_address\": \n{ \"type\": \"string\" }, \"country\": { \"enum\": [\"United States of America\", \"Canada\"] } }, \n\"if\": { \"properties\": { \"country\": { \"const\": \"United States of America\" } } }, \n\"then\": { \"properties\": { \"postal_code\": { \"pattern\": \"[0-9]{5}(-[0-9]{4})?\" } } }, \n\"else\": { \"properties\": { \"postal_code\": { \"pattern\": \"[A-Z][0-9][A-Z] [0-9][A-Z][0-9]\" } } } }"
+        },
+        "allOf": {
+            "$ref": "#/definitions/schemaArray",
+            "description": "待校验的数据对象满足 allof 关键字中给出的所有约束时，才算符合要求"
+        },
+        "anyOf": {
+            "$ref": "#/definitions/schemaArray",
+            "description": "待校验的数据对象满足 anyof 关键字中给出的任一约束时，才算符合要求"
+        },
+        "oneOf": {
+            "$ref": "#/definitions/schemaArray",
+            "description": "oneof 关键字约束待校验的数据正好符合约束条件中的一项"
+        },
+        "not": {
+            "$ref": "#",
+            "description": "not 关键字约束待校验的数据不是给出的约束条件"
+        }
+    },
+    "default": true
+}
