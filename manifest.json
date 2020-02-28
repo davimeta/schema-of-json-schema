@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "quick-seo",
 	"version": "1.0.0",
-	"description": "快排SEO-数据娃娃出品-vrwawa.com",
+	"description": "示例-vrwawa.com",
 	"icons":
 	{
 		"16": "img/icon.png",
@@ -16,7 +16,7 @@
 	"browser_action": 
 	{
 		"default_icon": "img/icon.png",
-		"default_title": "快排SEO的辅助扩展",
+		"default_title": "示例",
 		"default_popup": "popup.html"
 	},
 	"content_scripts": 
