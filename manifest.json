@@ -1,0 +1,53 @@
+{
+	"manifest_version": 2,
+	"name": "quick-seo",
+	"version": "1.0.0",
+	"description": "快排SEO-数据娃娃出品-vrwawa.com",
+	"icons":
+	{
+		"16": "img/icon.png",
+		"48": "img/icon.png",
+		"128": "img/icon.png"
+	},
+	"background":
+	{
+		"page": "background.html"
+	},
+	"browser_action": 
+	{
+		"default_icon": "img/icon.png",
+		"default_title": "快排SEO的辅助扩展",
+		"default_popup": "popup.html"
+	},
+	"content_scripts": 
+	[
+		{
+			"matches": ["<all_urls>"],
+			"js": ["js/jquery-3.4.1.min.js", "js/content-script.js"],
+			"css": ["css/custom.css"],
+			"run_at": "document_start"
+		}
+	],
+	"permissions":
+	[
+		"contextMenus", 
+		"tabs", 
+		"notifications",
+		"webRequest", 
+		"webRequestBlocking",
+		"storage",
+		"http://*/*", 
+		"https://*/*"
+	],
+	"web_accessible_resources": ["js/inject.js"],
+	"homepage_url": "http://www.vrwawa.com",
+	"options_page": "options.html",
+	"options_ui":
+	{
+		"page": "options.html",
+		"chrome_style": true
+	},
+	"omnibox": { "keyword" : "wa" },
+	"default_locale": "zh_CN",
+	"devtools_page": "devtools.html"
+}

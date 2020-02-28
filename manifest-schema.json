@@ -1,0 +1,227 @@
+{
+    "//$schema": "https://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "manifest_version": {
+            "type": "integer",
+            "description": "chrome扩展程序包配置清单文件的语法版本,必须指定为2",
+            "enum": [
+                2
+            ]
+        },
+        "name": {
+            "type": "string",
+            "description": "扩展程序名称"
+        },
+        "version": {
+            "type": "string",
+            "description": "扩展程序版本号"
+        },
+        "description": {
+            "type": "string",
+            "description": "扩展程序功能描述"
+        },
+        "icons": {
+            "type": "object",
+            "properties": {
+                "16": {
+                    "type": "string",
+                    "description": "16px*16px图标文件"
+                },
+                "48": {
+                    "type": "string",
+                    "description": "48px*48px图标文件"
+                },
+                "128": {
+                    "type": "string",
+                    "description": "128px*128px图标文件"
+                }
+            }
+        },        
+        "background": {
+            "type": "object",
+            "description": "会一直常驻的后台JS或后台页面,",
+            "minProperties": 1,
+            "properties": {
+                "page": {
+                    "type": "string",
+                    "description": "2种指定方式，如果指定JS，那么会自动生成一个背景页"
+                },
+                "scripts": {
+                    "type": "array",
+                    "minItems": 1,
+                    "description": "常驻的后台的JS",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "browser_action": {
+            "type": "object",
+            "description": "browser_action、page_action、app必须三选一",
+            "properties": {
+                "default_icon": {
+                    "type": "string",
+                    "description": "浏览器右上角图标设置"
+                },
+                "default_title": {
+                    "type": "string",
+                    "description": "图标悬停时的标题，可选"
+                },
+                "default_popup": {
+                    "type": "string",
+                    "description": "*.html页面"
+                }
+            }
+        },
+        "page_action": {
+            "type": "object",
+            "description": "browser_action、page_action、app必须三选一",
+            "properties": {
+                "default_icon": {
+                    "type": "string",
+                    "description": "浏览器右上角图标设置"
+                },
+                "default_title": {
+                    "type": "string",
+                    "description": "图标悬停时的标题，可选"
+                },
+                "default_popup": {
+                    "type": "string",
+                    "description": "*.html页面"
+                }
+            }
+        },
+        "content_scripts": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "description": "需要直接注入页面的JS规则组",
+                "properties": {
+                    "matches": {
+                        "type": "array",
+                        "description": "参考配置:[\"<all_urls>\"]或者[\"http://*/*\", \"https://*/*\"]",
+                        "items": {
+                            "type": "string",
+                            "description": "<all_urls>表示匹配所有地址"
+                        }
+                    },
+                    "js": {
+                        "type": "array",
+                        "description": "js文件路径,参考 [\"js/jquery-1.8.3.js\", \"js/content-script.js\"]",
+                        "items": {
+                            "type": "string",
+                            "description": "js文件路径,与html页面的相对路径"
+                        }
+                    },
+                    "css": {
+                        "type": "array",
+                        "description": "css文件路径,参考[\"css/custom.css\"]",
+                        "items": {
+                            "type": "string",
+                            "description": "css文件路径,与html页面的相对路径"
+                        }
+                    },
+                    "run_at": {
+                        "type": "string",
+                        "description": "代码注入的时间，可选值： \"document_start\", \"document_end\", or \"document_idle\"，默认document_idle，表示页面空闲时",
+                        "enum": [
+                            "document_start",
+                            "document_end",
+                            "document_idle"
+                        ]
+                    }
+                }
+            }
+        },
+        "permissions": {
+            "type": "array",
+            "description": "权限申请",
+            "items": {
+                "type": "string",
+                "description": "contextMenus,右键菜单|tabs,标签|notifications通知|webRequest,web请求|webRequestBlocking,阻塞式web请求|storage,插件本地存储|http://*/*,https://*/*,可以通过executeScript或者insertCSS访问的网站",
+                "enum": [
+                    "contextMenus",
+                    "tabs",
+                    "notifications",
+                    "webRequest",
+                    "webRequestBlocking",
+                    "storage",
+                    "http://*/*",
+                    "https://*/*"
+                ]
+            },
+            "additionalItems": true
+        },
+        "web_accessible_resources": {
+            "type": "array",
+            "description": "普通页面能够直接访问的插件资源列表，如果不设置是无法直接访问的",
+            "items": {
+                "type": "string",
+                "description": "参考:a.js"
+            }
+        },
+        "homepage_url": {
+            "type": "string",
+            "description": "插件主页，这个很重要，不要浪费了这个免费广告位"
+        },
+        "chrome_url_overrides": {
+            "type": "object",
+            "description": "覆盖浏览器默认页面",
+            "properties": {
+                "newtab": {
+                    "type": "string",
+                    "description": "覆盖浏览器默认的新标签页,参考:a.html"
+                }
+            }
+        },
+        "options_page": {
+            "type": "string",
+            "description": "Chrome40以前的插件配置页写法"
+        },
+        "options_ui": {
+            "type": "object",
+            "description": "Chrome40以后的插件配置页写法，如果2个都写，新版Chrome只认后面这一个",
+            "properties": {
+                "page": {
+                    "type": "string",
+                    "description": "参考:a.html"
+                },
+                "chrome_style": {
+                    "type": "boolean",
+                    "description": "true:添加一些默认的样式，推荐使用"
+                }
+            }
+        },
+        "omnibox": {
+            "type": "object",
+            "description": "向地址栏注册一个关键字以提供搜索建议，只能设置一个关键字",
+            "properties": {
+                "keyword": {
+                    "type": "string",
+                    "description": "搜索输入时的关键字"
+                }
+            }
+        },
+        "default_locale": {
+            "description": "默认语言,zh_CN:中文,en:英文",
+            "anyOf": [
+                {
+                    "type": "string",
+                    "enum": [
+                        "en",
+                        "zh_CN"
+                    ]
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "devtools_page":{
+            "type":"string",
+            "description": "devtools页面入口，注意只能指向一个HTML文件，不能是JS文件,参考devtools.html"
+        }
+    }
+}
